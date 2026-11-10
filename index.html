@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>غيث ورنيم | Ghaith & Raneem</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'cairo': ['Cairo', 'sans-serif'],
+                        'vibes': ['Great Vibes', 'cursive'],
+                    },
+                    colors: {
+                        'dark-bg': '#050505',
+                        'card-bg': '#0f0f11',
+                        'burgundy': {
+                            DEFAULT: '#8b0000', // Dark Red / Burgundy
+                            glow: '#ff1a1a',    // Bright red for glow
+                            light: '#ff4d4d'    // Soft red
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Fade in animations */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-in-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating animation for hero icons */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Glow effect for timeline */
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(139, 0, 0, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(255, 26, 26, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(139, 0, 0, 0.4); }
+        }
+        .glow-effect {
+            animation: glow 3s infinite;
+        }
+
+        /* Masonry Grid */
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #8b0000; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff1a1a; }
+
+        /* Typewriter Cursor */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: #ff1a1a;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Floating Particles/Hearts Background */
+        #particles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            bottom: -20px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(139, 0, 0, 0.3);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 26, 26, 0.2);
+            animation: floatUp linear infinite;
+        }
+        .particle::before, .particle::after {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            background-color: inherit;
+            border-radius: 50%;
+        }
+        .particle::before { top: -50%; left: 0; }
+        .particle::after { top: 0; left: 50%; }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+
+        /* Glassmorphism for counter */
+        .glass-box {
+            background: rgba(15, 15, 17, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg font-cairo text-gray-200 antialiased selection:bg-burgundy selection:text-white overflow-x-hidden">
+
+    <!-- Background Particles -->
+    <div id="particles-container"></div>
+
+    <!-- Login Screen Overlay -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-dark-bg text-center px-4 transition-opacity duration-1000">
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-burgundy/20 rounded-full blur-[100px]"></div>
+        </div>
+        
+        <div class="relative z-10 bg-card-bg p-8 md:p-12 rounded-3xl border border-white/10 shadow-[0_0_40px_rgba(139,0,0,0.4)] max-w-md w-full">
+            <h1 class="font-vibes text-5xl md:text-6xl text-burgundy-light mb-3 drop-shadow-md" dir="ltr">Ghaith & Raneem</h1>
+            <p class="font-cairo text-gray-400 mb-8 text-sm">أدخل كلمة المرور (تاريخنا المميز) لرؤية ذكرياتنا</p>
+            
+            <div class="space-y-4">
+                <input type="password" id="password-input" class="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-burgundy-light focus:ring-1 focus:ring-burgundy-light transition-all font-sans text-center tracking-[0.3em] text-lg" placeholder="••••••••">
+                
+                <button id="login-btn" class="w-full bg-burgundy hover:bg-burgundy-light text-white font-cairo font-bold text-lg rounded-xl px-4 py-3 transition-colors duration-300 shadow-lg shadow-burgundy/50">دخول</button>
+                
+                <p id="error-msg" class="text-burgundy-light font-cairo text-sm hidden mt-2">كلمة المرور غير صحيحة، حاول مرة أخرى.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (Hidden Initially) -->
+    <div id="main-content" class="hidden opacity-0 transition-opacity duration-1000 relative z-10">
+        
+        <!-- Hero Section -->
+        <header class="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+                <div class="absolute top-[10%] left-[20%] w-96 h-96 bg-burgundy/20 rounded-full blur-[120px]"></div>
+                <div class="absolute bottom-[10%] right-[20%] w-[30rem] h-[30rem] bg-burgundy-glow/10 rounded-full blur-[150px]"></div>
+            </div>
+
+            <div class="relative z-10 px-4 fade-in-element mt-10">
+                <h1 class="font-vibes text-7xl md:text-9xl text-white mb-4 drop-shadow-[0_0_20px_rgba(255,26,26,0.6)] tracking-wider" dir="ltr">Ghaith <span class="text-burgundy-light">&</span> Raneem</h1>
+                <p class="text-2xl md:text-4xl text-gray-300 font-light mb-16 max-w-2xl mx-auto leading-relaxed font-vibes" dir="ltr">
+                    Forever & Always
+                </p>
+                <a href="#message-section" class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-burgundy/20 text-burgundy-light border border-burgundy/50 hover:bg-burgundy/40 hover:shadow-[0_0_25px_rgba(255,26,26,0.6)] backdrop-blur-sm transition-all duration-300 floating hover:scale-110">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                </a>
+            </div>
+        </header>
+
+        <!-- Typewriter Message Section -->
+        <section id="message-section" class="py-20 relative">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="glass-box p-8 md:p-12 rounded-3xl shadow-[0_0_30px_rgba(139,0,0,0.15)] relative">
+                    <svg class="absolute top-6 right-6 w-8 h-8 text-burgundy-light/30" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    
+                    <p class="text-2xl md:text-3xl text-gray-200 leading-relaxed font-cairo" style="min-height: 120px;">
+                        <span id="typewriter-text"></span><span class="cursor">&nbsp;</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Love Counter Section -->
+        <section class="py-16 relative">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 fade-in-element">
+                    <h2 class="font-cairo font-bold text-3xl md:text-4xl text-white mb-4">وقتنا معاً</h2>
+                    <p class="text-gray-400">منذ أن جمعنا القدر في 28/9/2026</p>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center fade-in-element" dir="ltr">
+                    <div class="glass-box p-6 rounded-2xl flex flex-col items-center justify-center hover:shadow-[0_0_20px_rgba(255,26,26,0.3)] transition-all duration-300">
+                        <span id="count-days" class="text-4xl md:text-5xl font-bold text-burgundy-light mb-2">0</span>
+                        <span class="text-sm text-gray-400 font-cairo uppercase tracking-widest" dir="rtl">يوم</span>
+                    </div>
+                    <div class="glass-box p-6 rounded-2xl flex flex-col items-center justify-center hover:shadow-[0_0_20px_rgba(255,26,26,0.3)] transition-all duration-300">
+                        <span id="count-hours" class="text-4xl md:text-5xl font-bold text-burgundy-light mb-2">0</span>
+                        <span class="text-sm text-gray-400 font-cairo uppercase tracking-widest" dir="rtl">ساعة</span>
+                    </div>
+                    <div class="glass-box p-6 rounded-2xl flex flex-col items-center justify-center hover:shadow-[0_0_20px_rgba(255,26,26,0.3)] transition-all duration-300">
+                        <span id="count-mins" class="text-4xl md:text-5xl font-bold text-burgundy-light mb-2">0</span>
+                        <span class="text-sm text-gray-400 font-cairo uppercase tracking-widest" dir="rtl">دقيقة</span>
+                    </div>
+                    <div class="glass-box p-6 rounded-2xl flex flex-col items-center justify-center hover:shadow-[0_0_20px_rgba(255,26,26,0.3)] transition-all duration-300">
+                        <span id="count-secs" class="text-4xl md:text-5xl font-bold text-burgundy-light mb-2">0</span>
+                        <span class="text-sm text-gray-400 font-cairo uppercase tracking-widest" dir="rtl">ثانية</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="our-story" class="py-24 relative">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-20 fade-in-element">
+                    <h2 class="font-cairo font-bold text-4xl md:text-5xl text-white mb-4">قصتنا</h2>
+                    <div class="w-24 h-1 bg-burgundy mx-auto rounded-full mb-6 shadow-[0_0_15px_rgba(139,0,0,0.8)]"></div>
+                    <p class="text-lg text-gray-400">تواريخ حُفرت في الذاكرة ولا يمكن نسيانها.</p>
+                </div>
+
+                <div class="relative">
+                    <!-- Vertical Line -->
+                    <div class="absolute top-0 bottom-0 right-4 md:left-1/2 w-1 md:-ml-0.5 bg-burgundy/40 rounded-full shadow-[0_0_10px_rgba(139,0,0,0.5)]"></div>
+
+                    <div class="space-y-16">
+                        <!-- Event 1 -->
+                        <div class="relative flex flex-col md:flex-row items-center justify-between fade-in-element">
+                            <div class="w-full md:w-5/12 pr-12 md:pr-0 md:pl-8 text-right md:text-left mb-4 md:mb-0"></div>
+                            
+                            <div class="absolute right-0 md:left-1/2 md:-ml-4 flex items-center justify-center w-8 h-8 rounded-full bg-dark-bg border-4 border-burgundy-light shadow-[0_0_20px_rgba(255,26,26,0.8)] z-10 text-burgundy-light glow-effect">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                            </div>
+
+                            <div class="w-full md:w-5/12 pr-12 md:pr-8 text-right">
+                                <div class="bg-card-bg p-6 rounded-2xl shadow-lg border border-white/5 hover:border-burgundy-light/40 hover:shadow-[0_0_25px_rgba(255,26,26,0.15)] transition-all duration-300 relative group glass-box">
+                                    <span class="inline-block py-1 px-3 rounded-full bg-burgundy/20 text-burgundy-light text-sm font-bold tracking-wider mb-4 border border-burgundy/30">24/9/2026</span>
+                                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-burgundy-light transition-colors">يوم ميلاد أميرتي</h3>
+                                    <p class="text-gray-400 leading-relaxed">تاريخ ميلاد رنيم. اليوم الذي أشرقت فيه الدنيا بقدومك، وأصبح للعالم معنى أجمل.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event 2 -->
+                        <div class="relative flex flex-col md:flex-row items-center justify-between fade-in-element md:flex-row-reverse">
+                            <div class="w-full md:w-5/12 pr-12 md:pr-0 md:text-right mb-4 md:mb-0"></div>
+                            
+                            <div class="absolute right-0 md:left-1/2 md:-ml-4 flex items-center justify-center w-8 h-8 rounded-full bg-dark-bg border-4 border-burgundy-light shadow-[0_0_20px_rgba(255,26,26,0.8)] z-10 text-burgundy-light glow-effect" style="animation-delay: 0.5s;">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                            </div>
+
+                            <div class="w-full md:w-5/12 pr-12 md:pr-0 md:pl-8 text-right md:text-left">
+                                <div class="bg-card-bg p-6 rounded-2xl shadow-lg border border-white/5 hover:border-burgundy-light/40 hover:shadow-[0_0_25px_rgba(255,26,26,0.15)] transition-all duration-300 relative group glass-box">
+                                    <span class="inline-block py-1 px-3 rounded-full bg-burgundy/20 text-burgundy-light text-sm font-bold tracking-wider mb-4 border border-burgundy/30">28/9/2026</span>
+                                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-burgundy-light transition-colors">بداية الحكاية</h3>
+                                    <p class="text-gray-400 leading-relaxed">يوم تعارفنا. صدفة جميلة جمعتنا، ولم أكن أعلم حينها أنني التقيت بنصفي الآخر ومصدر سعادتي.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event 3 -->
+                        <div class="relative flex flex-col md:flex-row items-center justify-between fade-in-element">
+                            <div class="w-full md:w-5/12 pr-12 md:pr-0 md:pl-8 text-right md:text-left mb-4 md:mb-0"></div>
+                            
+                            <div class="absolute right-0 md:left-1/2 md:-ml-4 flex items-center justify-center w-8 h-8 rounded-full bg-dark-bg border-4 border-burgundy-glow shadow-[0_0_25px_rgba(255,26,26,1)] z-10 text-burgundy-glow glow-effect" style="animation-delay: 1s;">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                            </div>
+
+                            <div class="w-full md:w-5/12 pr-12 md:pr-8 text-right">
+                                <div class="bg-card-bg p-6 rounded-2xl shadow-lg border border-white/5 hover:border-burgundy-glow/50 hover:shadow-[0_0_30px_rgba(255,26,26,0.25)] transition-all duration-300 relative group glass-box">
+                                    <span class="inline-block py-1 px-3 rounded-full bg-burgundy/30 text-burgundy-glow text-sm font-bold tracking-wider mb-4 border border-burgundy-glow/40">10/10/2026</span>
+                                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-burgundy-glow transition-colors">تاريخ مميز</h3>
+                                    <p class="text-gray-400 leading-relaxed">اليوم الذي حكينا فيه لبعض "أحبك". الكلمة التي غيرت عالمي وجعلت حياتي تتلون بأجمل المشاعر.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in-element">
+                <h2 class="font-cairo font-bold text-4xl md:text-5xl text-white mb-4">ذكرياتنا</h2>
+                <div class="w-24 h-1 bg-burgundy mx-auto rounded-full mb-6 shadow-[0_0_15px_rgba(139,0,0,0.8)]"></div>
+                <p class="text-lg text-gray-400 max-w-xl mx-auto">أجمل اللحظات التي جمعتنا معاً.</p>
+            </div>
+
+            <!-- Masonry Grid -->
+            <div class="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
+                
+                <div class="masonry-item relative group overflow-hidden rounded-2xl bg-card-bg fade-in-element cursor-pointer border border-white/5 hover:border-burgundy-light/60 hover:shadow-[0_0_30px_rgba(255,26,26,0.3)] transition-all duration-500">
+                    <img src="12.jpeg" alt="Memory 1" class="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-70 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end">
+                        <div class="p-6 w-full text-right">
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item relative group overflow-hidden rounded-2xl bg-card-bg fade-in-element cursor-pointer border border-white/5 hover:border-burgundy-light/60 hover:shadow-[0_0_30px_rgba(255,26,26,0.3)] transition-all duration-500">
+                    <img src="13.jpeg" alt="Memory 2" class="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-70 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end">
+                        <div class="p-6 w-full text-right">
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item relative group overflow-hidden rounded-2xl bg-card-bg fade-in-element cursor-pointer border border-white/5 hover:border-burgundy-light/60 hover:shadow-[0_0_30px_rgba(255,26,26,0.3)] transition-all duration-500">
+                    <img src="11.jpeg" alt="Memory 3" class="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-70 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end">
+                        <div class="p-6 w-full text-right">
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="masonry-item relative group overflow-hidden rounded-2xl bg-card-bg fade-in-element cursor-pointer border border-white/5 hover:border-burgundy-light/60 hover:shadow-[0_0_30px_rgba(255,26,26,0.3)] transition-all duration-500">
+                    <img src="10.jpeg" alt="Memory 4" class="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-70 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end">
+                        <div class="p-6 w-full text-right">
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-black text-white py-16 text-center px-4 relative overflow-hidden border-t border-white/5 mt-10">
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-burgundy/10 rounded-full blur-[100px] pointer-events-none"></div>
+            
+            <div class="relative z-10 fade-in-element max-w-2xl mx-auto">
+                <h2 class="font-vibes text-4xl md:text-5xl mb-6 text-burgundy-light" dir="ltr">Ghaith & Raneem</h2>
+                
+                <svg class="w-8 h-8 text-burgundy-glow mx-auto mb-6 floating drop-shadow-[0_0_15px_rgba(255,26,26,0.8)]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                
+                <p class="text-gray-400 font-light text-lg mb-8">
+                    أحبك اليوم، وسأحبك غداً، وإلى الأبد.
+                </p>
+                <div class="w-full h-px bg-white/10 mb-8"></div>
+                <p class="text-sm text-gray-500 font-light">صُنع بحب ❤️</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /* --- Particles Background Setup --- */
+            const particlesContainer = document.getElementById('particles-container');
+            const particleCount = 25;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Randomize position, size, animation duration and delay
+                const size = Math.random() * 8 + 4; // 4px to 12px
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${Math.random() * 15 + 10}s`; // 10s to 25s
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+
+            /* --- Login Logic --- */
+            const loginScreen = document.getElementById('login-screen');
+            const mainContent = document.getElementById('main-content');
+            const passInput = document.getElementById('password-input');
+            const loginBtn = document.getElementById('login-btn');
+            const errorMsg = document.getElementById('error-msg');
+
+            let appInitialized = false;
+
+            function handleLogin() {
+                const enteredPassword = passInput.value.trim();
+                
+                if (enteredPassword === '2892026') {
+                    errorMsg.classList.add('hidden');
+                    loginScreen.classList.add('opacity-0');
+                    
+                    setTimeout(() => {
+                        loginScreen.classList.add('hidden');
+                        mainContent.classList.remove('hidden');
+                        
+                        setTimeout(() => {
+                            mainContent.classList.remove('opacity-0');
+                            
+                            // Initialize features only after login
+                            if (!appInitialized) {
+                                initScrollObserver();
+                                startTypewriter();
+                                startCounter();
+                                appInitialized = true;
+                            }
+                        }, 50);
+                    }, 1000);
+                } else {
+                    errorMsg.classList.remove('hidden');
+                    passInput.value = '';
+                    passInput.focus();
+                }
+            }
+
+            loginBtn.addEventListener('click', handleLogin);
+            passInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleLogin();
+            });
+
+            /* --- Intersection Observer (Scroll Animations) --- */
+            function initScrollObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                        }
+                    });
+                }, { threshold: 0.15 });
+
+                document.querySelectorAll('.fade-in-element').forEach(el => observer.observe(el));
+            }
+
+            /* --- Typewriter Effect --- */
+            const loveMessage = "إإلى أجمل صدفة في حياتي، أنوشتي... من يوم ما عرفتك في ذلك اليوم الجميل، تغيرت كل تفاصيلي. أنتِ النور الذي أضاء أيامي، وكل لحظة معكِ هي عمر بحد ذاته. أحبكِ اليوم، وغداً، وإلى الأبد.";
+            let charIndex = 0;
+            const typewriterEl = document.getElementById('typewriter-text');
+            
+            function startTypewriter() {
+                if (charIndex < loveMessage.length) {
+                    typewriterEl.innerHTML += loveMessage.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(startTypewriter, 60); // Typing speed
+                }
+            }
+
+            /* --- Love Counter (Since 28/9/2026) --- */
+            // Date format: Year, Month (0-indexed, so 8 = September), Day, Hour, Min, Sec
+            const startDate = new Date(2026, 8, 28, 0, 0, 0).getTime();
+            
+            const daysEl = document.getElementById('count-days');
+            const hoursEl = document.getElementById('count-hours');
+            const minsEl = document.getElementById('count-mins');
+            const secsEl = document.getElementById('count-secs');
+
+            function startCounter() {
+                function update() {
+                    const now = new Date().getTime();
+                    const diff = now - startDate;
+                    
+                    // If current date is before start date (shouldn't happen based on context, but just in case)
+                    if (diff < 0) return;
+
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    daysEl.innerText = days;
+                    hoursEl.innerText = hours;
+                    minsEl.innerText = minutes;
+                    secsEl.innerText = seconds;
+                }
+                
+                update(); // initial call
+                setInterval(update, 1000); // update every second
+            }
+        });
+    </script>
+</body>
+</html>
